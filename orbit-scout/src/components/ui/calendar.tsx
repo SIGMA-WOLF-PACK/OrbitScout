@@ -64,7 +64,7 @@ function Calendar({
         IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
       }}
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      {...props} // Prevent ESLint warning here
+      // {...props} // Prevent ESLint warning here
     />
   )
 }
