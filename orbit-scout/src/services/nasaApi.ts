@@ -1,12 +1,7 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const { NEXT_PUBLIC_NASA_API_KEY } = process.env;
 
 const NASA_API_URL = 'https://api.nasa.gov/neo/rest/v1/feed';
-const API_KEY = NEXT_PUBLIC_NASA_API_KEY; // Replace with your NASA API key
+const API_KEY = process.env.NEXT_PUBLIC_NASA_API_KEY;
 
 interface NeoResponse {
   near_earth_objects: Record<string, NeoObject[]>;
@@ -33,7 +28,18 @@ interface NeoObject {
   }[];
 }
 
-export const fetchNEOData = async (start_date: string, end_date: string): Promise<NeoResponse> => {
-  const response = await axios.get<NeoResponse>(`${NASA_API_URL}?start_date=${start_date}&end_date=${end_date}&api_key=${API_KEY}`);
-  return response.data;
+export const fetchNEOData = async (startDate: string, endDate: string): Promise<NeoResponse> => {
+  try {
+    const response = await axios.get<NeoResponse>(NASA_API_URL, {
+      params: {
+        start_date: startDate,
+        end_date: endDate,
+        api_key: API_KEY
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching NEO data:', error);
+    throw new Error('Failed to fetch NEO data');
+  }
 };
