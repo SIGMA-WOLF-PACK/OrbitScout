@@ -49,148 +49,160 @@ const PLANETS: Planet[] = [
 
 const SolarSystem: React.FC<SolarSystemProps> = ({ neoData, onNEOClick }) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  console.log("SolarSystem rendered:", { neoData, mountRef });
   const sceneRef = useRef<THREE.Scene>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const mountNode = mountRef.current;
-    if (!mountNode) return;
-
-    // Scene setup
-    const scene = new THREE.Scene();
-    sceneRef.current = scene;
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    mountRef.current.appendChild(renderer.domElement);
-
-    // Controls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
-
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040);
-    const pointLight = new THREE.PointLight(0xffffff, 2, 100);
-    scene.add(ambientLight, pointLight);
-
-    // Sun
-    const sunGeometry = new THREE.SphereGeometry(2, 32, 32);
-    const sunMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffff00
-    });
-    const sun = new THREE.Mesh(sunGeometry, sunMaterial);
-    scene.add(sun);
-
-    // Add planets
-    const planets = PLANETS.map(planet => {
-      const geometry = new THREE.SphereGeometry(planet.radius * 0.5, 32, 32);
-      const material = new THREE.MeshStandardMaterial({ color: planet.color });
-      const mesh = new THREE.Mesh(geometry, material);
-      
-      // Create orbit
-      const orbitGeometry = new THREE.RingGeometry(planet.distance, planet.distance + 0.1, 64);
-      const orbitMaterial = new THREE.MeshBasicMaterial({
-        color: 0x666666,
-        side: THREE.DoubleSide,
-        opacity: 0.3,
-        transparent: true
-      });
-      const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial);
-      orbit.rotation.x = Math.PI / 2;
-      
-      scene.add(orbit);
-      scene.add(mesh);
-      
-      return { mesh, distance: planet.distance, speed: planet.orbitalSpeed };
-    });
-
-    // Add NEOs
-    const neoObjects = neoData.map(neo => {
-      const size = (neo.estimated_diameter.kilometers.estimated_diameter_max + 
-                   neo.estimated_diameter.kilometers.estimated_diameter_min) / 4;
-      
-      const geometry = new THREE.SphereGeometry(size * 0.1, 16, 16);
-      const material = new THREE.MeshStandardMaterial({ 
-        color: 0xff0000,
-        emissive: 0xff0000,
-        emissiveIntensity: 0.5
-      });
-      const mesh = new THREE.Mesh(geometry, material);
-      
-      // Position NEO relative to Earth
-      const distance = parseFloat(neo.close_approach_data[0].miss_distance.astronomical) * 2;
-      mesh.position.set(
-        10 + distance * Math.cos(Math.random() * Math.PI * 2),
-        distance * Math.sin(Math.random() * Math.PI * 2),
-        0
-      );
-      
-      // Add click handler
-      mesh.userData.neo = neo;
-      
-      scene.add(mesh);
-      return mesh;
-    });
-
-    // Camera positioning
-    camera.position.z = 30;
-    camera.position.y = 20;
-    camera.lookAt(0, 0, 0);
-
-    // Animation loop
-    let time = 0;
-    const animate = () => {
-      requestAnimationFrame(animate);
-      
-      // Rotate planets
-      planets.forEach((planet, index) => {
-        const angle = time * planet.speed;
-        planet.mesh.position.x = Math.cos(angle) * planet.distance;
-        planet.mesh.position.z = Math.sin(angle) * planet.distance;
-        planet.mesh.rotation.y += PLANETS[index].rotationSpeed;
-      });
-
-      // Update controls
-      controls.update();
-      
-      time += 0.01;
-      renderer.render(scene, camera);
-    };
-
-    // Raycaster for click detection
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-
-    const onClick = (event: MouseEvent) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(neoObjects);
-
-      if (intersects.length > 0) {
-        const neo = intersects[0].object.userData.neo;
-        onNEOClick(neo);
+    const timer = setTimeout(() => {
+      console.log("useEffect triggered");
+      const mountNode = mountRef.current;
+      if (!mountNode) {
+        console.log("mountRef.current is null");
+        return;
       }
-    };
 
-    window.addEventListener('click', onClick);
-    setIsLoading(false);
-    animate();
+      
+     
+      // Scene setup
+      console.log("Setting up scene with neoData:", neoData);
+      const scene = new THREE.Scene();
+      sceneRef.current = scene;
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
 
-    // Clean up
-    return () => {
-      if (mountNode) {
-        mountNode.removeChild(renderer.domElement);
-      }
-    };
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      mountRef.current.appendChild(renderer.domElement);
+
+      // Controls
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0x404040);
+      const pointLight = new THREE.PointLight(0xffffff, 2, 100);
+      scene.add(ambientLight, pointLight);
+
+      // Sun
+      const sunGeometry = new THREE.SphereGeometry(2, 32, 32);
+      const sunMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffff00
+      });
+      const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+      scene.add(sun);
+
+      // Add planets
+      const planets = PLANETS.map(planet => {
+        const geometry = new THREE.SphereGeometry(planet.radius * 0.5, 32, 32);
+        const material = new THREE.MeshStandardMaterial({ color: planet.color });
+        const mesh = new THREE.Mesh(geometry, material);
+        
+        // Create orbit
+        const orbitGeometry = new THREE.RingGeometry(planet.distance, planet.distance + 0.1, 64);
+        const orbitMaterial = new THREE.MeshBasicMaterial({
+          color: 0x666666,
+          side: THREE.DoubleSide,
+          opacity: 0.3,
+          transparent: true
+        });
+        const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial);
+        orbit.rotation.x = Math.PI / 2;
+        
+        scene.add(orbit);
+        scene.add(mesh);
+        
+        return { mesh, distance: planet.distance, speed: planet.orbitalSpeed };
+      });
+
+      // Add NEOs
+      const neoObjects = neoData.map(neo => {
+        const size = (neo.estimated_diameter.kilometers.estimated_diameter_max + 
+                     neo.estimated_diameter.kilometers.estimated_diameter_min) / 4;
+        
+        const geometry = new THREE.SphereGeometry(size * 0.1, 16, 16);
+        const material = new THREE.MeshStandardMaterial({ 
+          color: 0xff0000,
+          emissive: 0xff0000,
+          emissiveIntensity: 0.5
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        
+        // Position NEO relative to Earth
+        const distance = parseFloat(neo.close_approach_data[0].miss_distance.astronomical) * 2;
+        mesh.position.set(
+          10 + distance * Math.cos(Math.random() * Math.PI * 2),
+          distance * Math.sin(Math.random() * Math.PI * 2),
+          0
+        );
+        
+        // Add click handler
+        mesh.userData.neo = neo;
+        
+        scene.add(mesh);
+        return mesh;
+      });
+
+      // Camera positioning
+      camera.position.z = 30;
+      camera.position.y = 20;
+      camera.lookAt(0, 0, 0);
+
+      // Animation loop
+      let time = 0;
+      const animate = () => {
+        requestAnimationFrame(animate);
+        
+        // Rotate planets
+        planets.forEach((planet, index) => {
+          const angle = time * planet.speed;
+          planet.mesh.position.x = Math.cos(angle) * planet.distance;
+          planet.mesh.position.z = Math.sin(angle) * planet.distance;
+          planet.mesh.rotation.y += PLANETS[index].rotationSpeed;
+        });
+
+        // Update controls
+        controls.update();
+        
+        time += 0.01;
+        renderer.render(scene, camera);
+      };
+
+      // Raycaster for click detection
+      const raycaster = new THREE.Raycaster();
+      const mouse = new THREE.Vector2();
+
+      const onClick = (event: MouseEvent) => {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(neoObjects);
+
+        if (intersects.length > 0) {
+          const neo = intersects[0].object.userData.neo;
+          onNEOClick(neo);
+        }
+      };
+
+      window.addEventListener('click', onClick);
+      setIsLoading(false);
+      animate();
+
+      // Clean up
+      return () => {
+        if (mountNode) {
+          mountNode.removeChild(renderer.domElement);
+        }
+      };
+    }, 0); // Delay of 100ms
+
+    return () => clearTimeout(timer);
   }, [neoData, onNEOClick]);
 
   if (isLoading) {
-    return <div className="flex items-center justify-center h-[600px]">Loading solar system...</div>;
+    return <div className="text-white flex items-center justify-center h-[600px]">Loading solar system...</div>;
   }
 
   return <div ref={mountRef} className="h-[600px] w-full" />;

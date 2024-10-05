@@ -64,7 +64,8 @@ function Calendar({
         IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
       }}
-      {...props} 
+
+      {...props} // Prevent ESLint warning here
     />
   )
 }

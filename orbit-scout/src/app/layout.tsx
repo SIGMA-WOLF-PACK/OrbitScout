@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import logoImage from "./logo.png";
+import Image from "next/image";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -16,6 +18,9 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Orbit Scout",
   description: "3d webapp to explore the solar system and near-earth objects",
+  icons: {
+    icon: logoImage.src,
+  },
 };
 
 export default function RootLayout({
