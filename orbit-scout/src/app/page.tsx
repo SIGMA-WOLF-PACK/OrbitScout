@@ -1,77 +1,9 @@
-// "use client";
-
-// import { useEffect, useState } from 'react';
-// import SolarSystem from '../components/SolarSystem';
-// import { fetchNEOData } from '../services/nasaApi';
-// import Head from 'next/head';
-
-// interface NeoObject {
-//   id: string;
-//   name: string;
-//   close_approach_data: {
-//     close_approach_date: string;
-//   }[];
-// }
-
-// const Home: React.FC = () => {
-//   const [neoData, setNeoData] = useState<NeoObject[]>([]);
-//   const [error, setError] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     const getNEOData = async () => {
-//       const startDate = '2024-10-01';
-//       const endDate = '2024-10-05';
-
-//       try {
-//         const data = await fetchNEOData(startDate, endDate);
-//         const neoObjects = Object.values(data.near_earth_objects).flat();
-//         setNeoData(neoObjects);
-//       } catch (error) {
-//         if (error instanceof Error) {
-//           setError(error.message);
-//           console.error('Error fetching NEO data:', error.message);
-//         } else {
-//           setError('An unknown error occurred');
-//         }
-//       }
-//     };
-
-//     getNEOData();
-//   }, []);
-
-//   return (
-//     <div className="bg-gray-100 min-h-screen flex flex-col items-center">
-//       <Head>
-//         <title>Orbit Scout</title>
-//       </Head>
-//       <main className="max-w-4xl w-full p-5">
-//         <h1 className="text-4xl font-bold text-blue-600 text-center mb-5">Welcome to the OrbitScout</h1>
-//         <SolarSystem />
-//         <h2 className="text-2xl font-semibold text-gray-800 text-center mt-5">Near-Earth Objects</h2>
-//         {error ? (
-//           <p className="text-red-500 text-center font-semibold mt-4">Error: {error}</p>
-//         ) : (
-//           <ul className="mt-4 space-y-4">
-//             {neoData.map((neo) => (
-//               <li key={neo.id} className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition duration-200">
-//                 {neo.name} (Approach Date: {neo.close_approach_data[0]?.close_approach_date})
-//               </li>
-//             ))}
-//           </ul>
-//         )}
-//       </main>
-//     </div>
-//   );
-// };
-
-// export default Home;
-
 "use client";
 
 import { useEffect, useState } from 'react';
 import SolarSystem from '../components/SolarSystem';
 import { fetchNEOData } from '../services/nasaApi';
-import { Dialog } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
@@ -273,74 +205,73 @@ const Home: React.FC = () => {
             </Card>
           )}
         </div>
-
-        {/* Date Range Dialog */}
-        <Dialog open={showDatePicker} onOpenChange={setShowDatePicker}>
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-            <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
-              <h2 className="text-xl font-semibold mb-4">Select Date Range</h2>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="mb-2">Start Date</h3>
-                  <Calendar
-                    mode="single"
-                    selected={startDate}
-                    onSelect={(date) => date && setStartDate(date)}
-                    className="rounded-md border"
-                  />
-                </div>
-                <div>
-                  <h3 className="mb-2">End Date</h3>
-                  <Calendar
-                    mode="single"
-                    selected={endDate}
-                    onSelect={(date) => date && setEndDate(date)}
-                    className="rounded-md border"
-                  />
-                </div>
-              </div>
-              <div className="mt-6 flex justify-end gap-3">
-                <Button variant="outline" onClick={() => setShowDatePicker(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleDateRangeSubmit}>
-                  Apply Date Range
-                </Button>
-              </div>
+      {/* Date Range Dialog - Updated Structure */}
+      <Dialog open={showDatePicker} onOpenChange={setShowDatePicker}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Select Date Range</DialogTitle>
+          </DialogHeader>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="mb-2">Start Date</h3>
+              <Calendar
+                mode="single"
+                selected={startDate}
+                onSelect={(date) => date && setStartDate(date)}
+                className="rounded-md border"
+              />
+            </div>
+            <div>
+              <h3 className="mb-2">End Date</h3>
+              <Calendar
+                mode="single"
+                selected={endDate}
+                onSelect={(date) => date && setEndDate(date)}
+                className="rounded-md border"
+              />
             </div>
           </div>
-        </Dialog>
+          <div className="mt-6 flex justify-end gap-3">
+            <Button variant="outline" onClick={() => setShowDatePicker(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleDateRangeSubmit}>
+              Apply Date Range
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
-        {/* Introduction Dialog */}
-        <Dialog open={showIntroDialog} onOpenChange={setShowIntroDialog}>
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-            <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
-              <div className="flex items-center gap-3 mb-4">
-                <Info className="h-6 w-6 text-blue-500" />
-                <h2 className="text-xl font-semibold">Welcome to OrbitScout</h2>
-              </div>
-              <div className="space-y-4">
-                <p>
-                  OrbitScout helps you explore Near-Earth Objects (NEOs) - asteroids and comets that orbit the Sun and come within 1.3 astronomical units of Earth.
-                </p>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2">How to use OrbitScout:</h3>
-                  <ul className="list-disc list-inside space-y-2">
-                    <li>View the 3D visualization of our solar system and NEOs</li>
-                    <li>Click on any NEO to see detailed information</li>
-                    <li>Use the date range picker to explore different time periods</li>
-                    <li>Browse the list of NEOs and their key characteristics</li>
-                  </ul>
-                </div>
-              </div>
-              <div className="mt-6 flex justify-end">
-                <Button onClick={() => setShowIntroDialog(false)}>
-                  Get Started
-                </Button>
-              </div>
+      {/* Introduction Dialog - Updated Structure */}
+      <Dialog open={showIntroDialog} onOpenChange={setShowIntroDialog}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3">
+              <Info className="h-6 w-6 text-blue-500" />
+              Welcome to OrbitScout
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p>
+              OrbitScout helps you explore Near-Earth Objects (NEOs) - asteroids and comets that orbit the Sun and come within 1.3 astronomical units of Earth.
+            </p>
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h3 className="font-semibold mb-2">How to use OrbitScout:</h3>
+              <ul className="list-disc list-inside space-y-2">
+                <li>View the 3D visualization of our solar system and NEOs</li>
+                <li>Click on any NEO to see detailed information</li>
+                <li>Use the date range picker to explore different time periods</li>
+                <li>Browse the list of NEOs and their key characteristics</li>
+              </ul>
             </div>
           </div>
-        </Dialog>
+          <div className="mt-6 flex justify-end">
+            <Button onClick={() => setShowIntroDialog(false)}>
+              Get Started
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
       </main>
 
       <footer className="mt-12 bg-gray-800 text-white py-8">
