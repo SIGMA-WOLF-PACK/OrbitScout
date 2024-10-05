@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import * as React from "react"
@@ -63,8 +64,7 @@ function Calendar({
         IconLeft: ({ ...props }) => <ChevronLeftIcon className="h-4 w-4" />,
         IconRight: ({ ...props }) => <ChevronRightIcon className="h-4 w-4" />,
       }}
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      // {...props} // Prevent ESLint warning here
+      {...props} 
     />
   )
 }
