@@ -287,7 +287,7 @@ const Home: React.FC = () => {
             <DialogHeader>
               <DialogTitle className="flex items-center gap-3 text-white">
                 <Star className="h-8 w-8 text-yellow-300 animate-pulse" />
-                Welcome Space Explorer! 🚀
+                Welcome Orbit Scouters! 🚀
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-6 text-white">
