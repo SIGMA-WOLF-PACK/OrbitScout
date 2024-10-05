@@ -18,7 +18,9 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const getNEOData = async () => {
-      const data = await fetchNEOData();
+      const startDate = new Date().toISOString().split('T')[0];
+      const endDate = new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split('T')[0];
+      const data = await fetchNEOData(startDate, endDate);
       const neoObjects = Object.values(data.near_earth_objects).flat();
       setNeoData(neoObjects);
     };
@@ -28,10 +30,10 @@ const Home: React.FC = () => {
   return (
     <div>
       <Head>
-        <title>Orrery Web App</title>
+        <title>Orbit Scout</title>
       </Head>
       <main>
-        <h1>Welcome to the Orrery Web App</h1>
+        <h1>Welcome to the OrbitScout</h1>
         <SolarSystem />
         <h2>Near-Earth Objects</h2>
         <ul>
