@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
+import Navbar from '@/components/navbar';
 
 interface NEO {
   id: string;
@@ -132,19 +133,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-gradient-to-b from-indigo-900 via-purple-900 to-blue-900 min-h-screen">
-      <header className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-8 mb-8 rounded-b-3xl shadow-lg">
-        <div className="max-w-7xl mx-auto px-5">
-          <div className="flex items-center gap-4">
-            <Rocket className="h-12 w-12 animate-bounce" />
-            <div>
-              <h1 className="text-4xl font-bold mb-2 font-comic">Orbit Scout!</h1>
-              <p className="text-lg opacity-90">
-                Join us on an amazing journey through space! 🚀✨
-              </p>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar/>
 
       <main className="max-w-7xl mx-auto px-5">
         {introDialogClosed && (

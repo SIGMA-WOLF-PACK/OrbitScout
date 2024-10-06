@@ -56,7 +56,7 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ neoData, onNEOClick }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       console.log("useEffect triggered");
-      const mountNode = mountRef.current;
+      const mountNode = mountRef.current;//Transfer 
       if (!mountNode) {
         console.log("mountRef.current is null");
         return;
