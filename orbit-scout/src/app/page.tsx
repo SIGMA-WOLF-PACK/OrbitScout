@@ -120,19 +120,6 @@ const Home: React.FC = () => {
     setIntroDialogClosed(true);
   };
 
-  const svgIcon = (
-    <svg width="20" height="20" viewBox="0 0 2000 2000" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clipPath="url(#clip0_33_2)">
-        <path d="M1928.52 3.51562L1169.53 295.312L1178.52 180.859C1182.42 130.859 1128.52 96.875 1084.77 121.875L395.703 521.094C150.781 662.891 0 924.219 0 1207.03C0 1644.92 355.078 2000 792.969 2000C1075.78 2000 1337.5 1849.22 1479.3 1604.3L1878.12 915.234C1903.52 871.875 1869.53 817.578 1819.14 821.484L1704.69 830.469L1996.48 71.4844C1998.83 65.625 2000 58.9844 2000 52.7344C2000 23.4375 1976.56 0 1947.27 0C1940.62 0 1934.38 1.17187 1928.52 3.51562ZM750 750C882.608 750 1009.79 802.678 1103.55 896.447C1197.32 990.215 1250 1117.39 1250 1250C1250 1382.61 1197.32 1509.79 1103.55 1603.55C1009.79 1697.32 882.608 1750 750 1750C617.392 1750 490.215 1697.32 396.447 1603.55C302.678 1509.79 250 1382.61 250 1250C250 1117.39 302.678 990.215 396.447 896.447C490.215 802.678 617.392 750 750 750ZM750 1125C750 1091.85 736.83 1060.05 713.388 1036.61C689.946 1013.17 658.152 1000 625 1000C591.848 1000 560.054 1013.17 536.612 1036.61C513.17 1060.05 500 1091.85 500 1125C500 1158.15 513.17 1189.95 536.612 1213.39C560.054 1236.83 591.848 1250 625 1250C658.152 1250 689.946 1236.83 713.388 1213.39C736.83 1189.95 750 1158.15 750 1125ZM812.5 1500C829.076 1500 844.973 1493.42 856.694 1481.69C868.415 1469.97 875 1454.08 875 1437.5C875 1420.92 868.415 1405.03 856.694 1393.31C844.973 1381.58 829.076 1375 812.5 1375C795.924 1375 780.027 1381.58 768.306 1393.31C756.585 1405.03 750 1420.92 750 1437.5C750 1454.08 756.585 1469.97 768.306 1481.69C780.027 1493.42 795.924 1500 812.5 1500Z" fill="white"/>
-      </g>
-      <defs>
-        <clipPath id="clip0_33_2">
-          <rect width="2000" height="2000" fill="white"/>
-        </clipPath>
-      </defs>
-    </svg>
-  );
-
   const handlePostSubmit = (content: string, relatedNeoId?: string) => {
     const newPost: ForumPost = {
       id: Date.now().toString(),
@@ -148,17 +135,17 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-indigo-900 via-purple-900 to-blue-900 min-h-screen">
+    <div className="bg-gradient-to-b from-indigo-900 via-purple-900 to-blue-900 min-h-screen overflow-x-hidden">
       <Navbar/>
 
-      <main className="max-w-7xl mx-auto px-5">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {introDialogClosed && (
-          <div className="mb-8 p-6 bg-white/10 backdrop-blur-md rounded-2xl shadow-xl border border-white/20">
+          <div className="mb-6 sm:mb-8 p-4 sm:p-6 bg-white/10 backdrop-blur-md rounded-2xl shadow-xl border border-white/20">
             <div className="flex items-center gap-3">
               <CalendarIcon className="h-6 w-6 text-yellow-300" />
               <div>
-                <h2 className="text-xl font-semibold text-white">Our Space Adventure Timeline</h2>
-                <p className="text-purple-200">
+                <h2 className="text-lg sm:text-xl font-semibold text-white">Our Space Adventure Timeline</h2>
+                <p className="text-sm sm:text-base text-purple-200">
                   Exploring from {format(startDate, 'MMM dd, yyyy')} to {format(endDate, 'MMM dd, yyyy')}
                 </p>
               </div>
@@ -166,22 +153,22 @@ const Home: React.FC = () => {
           </div>
         )}
 
-        <Card className="mb-8 bg-white/10 backdrop-blur-md border-white/20">
-          <CardHeader>
-            <div className="flex items-center justify-between">
+        <Card className="mb-6 sm:mb-8 bg-white/10 backdrop-blur-md border-white/20">
+          <CardHeader className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
               <div className="flex items-center gap-3">
                 <Star className="h-6 w-6 text-yellow-300 animate-pulse" />
-                <h2 className="text-2xl font-semibold text-white">Magic Space Window</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold text-white">Magic Space Window</h2>
               </div>
               <Button
                 onClick={() => setShowDatePicker(true)}
-                className="bg-purple-500 hover:bg-purple-600 transition-all duration-300 flex items-center gap-2"
+                className="w-full sm:w-auto bg-purple-500 hover:bg-purple-600 transition-all duration-300 flex items-center gap-2"
               >
                 <Radio className="h-4 w-4" /> Change Time Machine Settings
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-4 sm:p-6">
             {loading ? (
               <div className="flex justify-center items-center h-96">
                 <div className="flex flex-col items-center gap-4">
@@ -209,18 +196,18 @@ const Home: React.FC = () => {
           </CardContent>
         </Card>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card className="bg-white/10 backdrop-blur-md border-white/20">
-            <CardHeader>
-              <h2 className="text-2xl font-semibold text-white flex items-center gap-3">
+            <CardHeader className="p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-semibold text-white flex items-center gap-3">
                 <Star className="h-6 w-6 text-yellow-300" />
                 Space Rock Collection
               </h2>
-              <p className="text-purple-200">
+              <p className="text-sm sm:text-base text-purple-200">
                 We found {neoData.length} amazing space rocks! ⭐
               </p>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-4 sm:p-6">
               <div className="space-y-4 max-h-[600px] overflow-y-auto custom-scrollbar">
                 {neoData.map((neo) => (
                   <div
@@ -233,7 +220,7 @@ const Home: React.FC = () => {
                     onClick={() => setSelectedNEO(neo)}
                   >
                     <h3 className="font-semibold text-white flex items-center gap-2">
-                      {svgIcon}
+                      <Star className="h-5 w-5 text-yellow-300" />
                       {neo.name}
                     </h3>
                     <div className="text-sm text-purple-200 mt-2">
@@ -248,9 +235,9 @@ const Home: React.FC = () => {
 
           {selectedNEO && (
             <Card className="bg-white/10 backdrop-blur-md border-white/20">
-              <CardHeader>
+              <CardHeader className="p-4 sm:p-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-semibold text-white flex items-center gap-3">
+                  <h2 className="text-xl sm:text-2xl font-semibold text-white flex items-center gap-3">
                     <Ruler className="h-6 w-6 text-yellow-300" />
                     Space Rock Details
                   </h2>
@@ -264,31 +251,31 @@ const Home: React.FC = () => {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="text-white">
+              <CardContent className="p-4 sm:p-6">
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold text-purple-200">{selectedNEO.name}</h3>
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div className="bg-white/5 p-4 rounded-xl border border-white/10">
                       <p className="text-purple-200">How Big?</p>
-                      <p className="text-2xl font-medium">
+                      <p className="text-xl sm:text-2xl font-medium text-white">
                         {selectedNEO.estimated_diameter.kilometers.estimated_diameter_min.toFixed(2)} km
                       </p>
                     </div>
                     <div className="bg-white/5 p-4 rounded-xl border border-white/10">
                       <p className="text-purple-200">How Far?</p>
-                      <p className="text-2xl font-medium">
+                      <p className="text-xl sm:text-2xl font-medium text-white">
                         {parseFloat(selectedNEO.close_approach_data[0].miss_distance.astronomical).toFixed(2)} AU
                       </p>
                     </div>
                     <div className="bg-white/5 p-4 rounded-xl border border-white/10">
                       <p className="text-purple-200">How Fast?</p>
-                      <p className="text-2xl font-medium">
+                      <p className="text-xl sm:text-2xl font-medium text-white">
                         {parseFloat(selectedNEO.close_approach_data[0].relative_velocity.kilometers_per_second).toFixed(2)} km/s
                       </p>
                     </div>
                     <div className="bg-white/5 p-4 rounded-xl border border-white/10">
                       <p className="text-purple-200">When?</p>
-                      <p className="text-2xl font-medium">
+                      <p className="text-xl sm:text-2xl font-medium text-white">
                         {format(new Date(selectedNEO.close_approach_data[0].close_approach_date), 'MMM dd, yyyy')}
                       </p>
                     </div>
@@ -296,7 +283,7 @@ const Home: React.FC = () => {
                   <div>
                     <div className={`p-4 rounded-xl border ${selectedNEO.is_potentially_hazardous_asteroid ? 'border-red-500 bg-red-500/20' : 'border-green-500 bg-green-500/20'}`}>
                       <p className="text-purple-200">Danger Level:</p>
-                      <p className={`text-2xl font-medium ${selectedNEO.is_potentially_hazardous_asteroid ? 'text-red-500' : 'text-green-500'}`}>
+                      <p className={`text-xl sm:text-2xl font-medium ${selectedNEO.is_potentially_hazardous_asteroid ? 'text-red-500' : 'text-green-500'}`}>
                         {selectedNEO.is_potentially_hazardous_asteroid ? 'Hazardous' : 'Not Hazardous'}
                       </p>
                     </div>
@@ -307,59 +294,58 @@ const Home: React.FC = () => {
           )}
         </div>
 
-        {/* New Forum Section */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <Card className="bg-white/10 backdrop-blur-md border-white/20">
-            <CardHeader>
-              <div className="flex items-center justify-between">
+            <CardHeader className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
                 <div className="flex items-center gap-3">
                   <MessageCircle className="h-6 w-6 text-yellow-300" />
                   <div>
-                    <h2 className="text-2xl font-semibold text-white">Space Explorers Chat</h2>
-                    <p className="text-purple-200">Share your discoveries with fellow space adventurers! 🚀</p>
+                    <h2 className="text-xl sm:text-2xl font-semibold text-white">Space Explorers Chat</h2>
+                    <p className="text-sm sm:text-base text-purple-200">Share your discoveries with fellow space adventurers! 🚀</p>
                   </div>
                 </div>
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
+            <CardContent className="p-4 sm:p-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div className="bg-white/5 p-4 rounded-xl border border-white/10">
                   <Textarea 
                     placeholder="Share your space thoughts..." 
-                    className="bg-white/5 border-white/20 text-white placeholder:text-white/50 mb-4"
+                    className="bg-white/5 border-white/20 text-white placeholder:text-white/50 mb-4 min-h-[100px]"
                   />
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
                     <p className="text-purple-200 text-sm">
                       {selectedNEO ? `Talking about: ${selectedNEO.name}` : 'General space chat'}
                     </p>
                     <Button 
                       onClick={() => handlePostSubmit("Your message here", selectedNEO?.id)}
-                      className="bg-purple-500 hover:bg-purple-600"
+                      className="w-full sm:w-auto bg-purple-500 hover:bg-purple-600"
                     >
                       Share Discovery! 🌟
                     </Button>
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {forumPosts.map(post => (
                     <div 
                       key={post.id}
                       className="bg-white/5 p-4 rounded-xl border border-white/10"
                     >
                       <div className="flex items-start gap-4">
-                        <Avatar>
+                        <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
                           <AvatarImage src={post.avatar} alt={post.author} />
                           <AvatarFallback>{post.author[0]}</AvatarFallback>
                         </Avatar>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
                             <h3 className="font-semibold text-white">{post.author}</h3>
                             <span className="text-purple-200 text-sm">
                               {post.timestamp}
                             </span>
                           </div>
-                          <p className="text-purple-200 mb-4">{post.content}</p>
+                          <p className="text-purple-200 mb-4 break-words">{post.content}</p>
                           {post.relatedNeoId && (
                             <div className="bg-purple-500/20 px-3 py-1 rounded-full text-sm text-white inline-block mb-4">
                               🔭 Looking at: {
@@ -387,13 +373,12 @@ const Home: React.FC = () => {
           </Card>
         </div>
 
-        {/* Date Range Dialog - Updated for child-friendly theme */}
         <Dialog open={showDatePicker} onOpenChange={setShowDatePicker}>
-          <DialogContent className="sm:max-w-2xl bg-gradient-to-br from-purple-900 to-blue-900 border-purple-500">
+          <DialogContent className="sm:max-w-md bg-gradient-to-br from-purple-900 to-blue-900 border-purple-500 p-4">
             <DialogHeader>
-              <DialogTitle className="text-white">Set Your Time Machine! ⏰</DialogTitle>
+              <DialogTitle className="text-white text-lg sm:text-xl">Set Your Time Machine! ⏰</DialogTitle>
             </DialogHeader>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div className="bg-white/10 p-4 rounded-xl">
                 <h3 className="mb-2 text-white">Start Date</h3>
                 <Calendar
@@ -413,32 +398,38 @@ const Home: React.FC = () => {
                 />
               </div>
             </div>
-            <div className="mt-6 flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setShowDatePicker(false)} className="text-white border-white hover:bg-white/20">
+            <div className="mt-6 flex flex-col sm:flex-row justify-end gap-3">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowDatePicker(false)} 
+                className="w-full sm:w-auto text-white border-white hover:bg-white/20"
+              >
                 Cancel
               </Button>
-              <Button onClick={handleDateRangeSubmit} className="bg-purple-500 hover:bg-purple-600">
+              <Button 
+                onClick={handleDateRangeSubmit} 
+                className="w-full sm:w-auto bg-purple-500 hover:bg-purple-600"
+              >
                 Start Adventure!
               </Button>
             </div>
           </DialogContent>
         </Dialog>
-
-        {/* Introduction Dialog - Updated for child-friendly theme */}
+        
         <Dialog open={showIntroDialog} onOpenChange={setShowIntroDialog}>
-          <DialogContent className="sm:max-w-2xl bg-gradient-to-br from-purple-900 to-blue-900 border-purple-500">
+          <DialogContent className="sm:max-w-md bg-gradient-to-br from-purple-900 to-blue-900 border-purple-500 p-4">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-3 text-white">
+              <DialogTitle className="flex items-center gap-3 text-white text-lg sm:text-xl">
                 <Star className="h-8 w-8 text-yellow-300 animate-pulse" />
                 Welcome Orbit Scouters! 🚀
               </DialogTitle>
             </DialogHeader>
-            <div className="space-y-6 text-white">
-              <p className="text-lg">
+            <div className="space-y-4 sm:space-y-6 text-white">
+              <p className="text-base sm:text-lg">
                 Get ready for an amazing space adventure! We're going to explore special rocks called Near-Earth Objects (NEOs) that float around in space near our planet! 
               </p>
-              <div className="bg-white/10 p-6 rounded-xl">
-                <h3 className="font-semibold mb-4 text-xl">Your Space Mission:</h3>
+              <div className="bg-white/10 p-4 sm:p-6 rounded-xl">
+                <h3 className="font-semibold mb-4 text-lg sm:text-xl">Your Space Mission:</h3>
                 <ul className="space-y-4">
                   <li className="flex items-center gap-3">
                     <Star className="h-5 w-5 text-yellow-300" />
@@ -456,7 +447,10 @@ const Home: React.FC = () => {
               </div>
             </div>
             <div className="mt-6 flex justify-end">
-              <Button onClick={handleIntroDialogClose} className="bg-purple-500 hover:bg-purple-600">
+              <Button 
+                onClick={handleIntroDialogClose} 
+                className="w-full sm:w-auto bg-purple-500 hover:bg-purple-600"
+              >
                 Start Your Space Journey! 🌟
               </Button>
             </div>
@@ -465,7 +459,6 @@ const Home: React.FC = () => {
       </main>
 
       <Footer/>
-
     </div>
   );
 };

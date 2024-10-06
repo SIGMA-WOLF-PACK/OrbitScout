@@ -53,9 +53,11 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ neoData, onNEOClick }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   console.log("SolarSystem rendered:", { neoData, mountRef });
   const sceneRef = useRef<THREE.Scene>(new THREE.Scene());
+  console.log("SolarSystem rendered:", { neoData, sceneRef });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return; // Skip server-side rendering
     const timer = setTimeout(() => {
       console.log("useEffect triggered");
       const mountNode = mountRef.current;//Transfer 
@@ -67,6 +69,12 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ neoData, onNEOClick }) => {
       
      
       // Scene setup
+      const setupScene = () => {
+        const mountNode = mountRef.current;
+        if (!mountNode) {
+          return;
+        };
+      }
       console.log("Setting up scene with neoData:", neoData);
       const scene = new THREE.Scene();
       sceneRef.current = scene;
