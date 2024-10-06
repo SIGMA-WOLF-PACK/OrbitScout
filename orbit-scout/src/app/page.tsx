@@ -7,9 +7,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
-import { Info, Rocket, Star, AlertCircle, Radio, Ruler, Calendar as CalendarIcon } from 'lucide-react';
+import { Rocket, Star, AlertCircle, Radio, Ruler, Calendar as CalendarIcon, MessageCircle, ThumbsUp } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Textarea } from '@/components/ui/textarea';
 
 interface NEO {
   id: string;
@@ -31,6 +33,17 @@ interface NEO {
   }>;
 }
 
+interface ForumPost {
+  id: string;
+  author: string;
+  avatar: string;
+  content: string;
+  likes: number;
+  replies: number;
+  timestamp: string;
+  relatedNeoId?: string;
+}
+
 const Home: React.FC = () => {
   const [neoData, setNeoData] = useState<NEO[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +54,29 @@ const Home: React.FC = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showIntroDialog, setShowIntroDialog] = useState(true);
   const [introDialogClosed, setIntroDialogClosed] = useState(false);
+
+  const [forumPosts, setForumPosts] = useState<ForumPost[]>([
+    {
+      id: '1',
+      author: 'SpaceExplorer123',
+      avatar: '/api/placeholder/32/32',
+      content: 'Just spotted this amazing asteroid! It\'s moving so fast! 🚀',
+      likes: 5,
+      replies: 2,
+      timestamp: '5m ago',
+      relatedNeoId: '2000433'
+    },
+    {
+      id: '2',
+      author: 'StarGazer',
+      avatar: '/api/placeholder/32/32',
+      content: 'Did anyone else notice how close this one is passing by? Super interesting! ⭐',
+      likes: 3,
+      replies: 1,
+      timestamp: '15m ago',
+      relatedNeoId: '2001036'
+    }
+  ]);
 
   const fetchData = async (start: Date, end: Date) => {
     setLoading(true);
@@ -78,6 +114,20 @@ const Home: React.FC = () => {
   const handleIntroDialogClose = () => {
     setShowIntroDialog(false);
     setIntroDialogClosed(true);
+  };
+
+  const handlePostSubmit = (content: string, relatedNeoId?: string) => {
+    const newPost: ForumPost = {
+      id: Date.now().toString(),
+      author: 'You',
+      avatar: '/api/placeholder/32/32',
+      content,
+      likes: 0,
+      replies: 0,
+      timestamp: 'Just now',
+      relatedNeoId
+    };
+    setForumPosts([newPost, ...forumPosts]);
   };
 
   return (
@@ -242,6 +292,86 @@ const Home: React.FC = () => {
               </CardContent>
             </Card>
           )}
+        </div>
+
+        {/* New Forum Section */}
+        <div className="mb-8">
+          <Card className="bg-white/10 backdrop-blur-md border-white/20">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <MessageCircle className="h-6 w-6 text-yellow-300" />
+                  <div>
+                    <h2 className="text-2xl font-semibold text-white">Space Explorers Chat</h2>
+                    <p className="text-purple-200">Share your discoveries with fellow space adventurers! 🚀</p>
+                  </div>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div className="bg-white/5 p-4 rounded-xl border border-white/10">
+                  <Textarea 
+                    placeholder="Share your space thoughts..." 
+                    className="bg-white/5 border-white/20 text-white placeholder:text-white/50 mb-4"
+                  />
+                  <div className="flex justify-between items-center">
+                    <p className="text-purple-200 text-sm">
+                      {selectedNEO ? `Talking about: ${selectedNEO.name}` : 'General space chat'}
+                    </p>
+                    <Button 
+                      onClick={() => handlePostSubmit("Your message here", selectedNEO?.id)}
+                      className="bg-purple-500 hover:bg-purple-600"
+                    >
+                      Share Discovery! 🌟
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  {forumPosts.map(post => (
+                    <div 
+                      key={post.id}
+                      className="bg-white/5 p-4 rounded-xl border border-white/10"
+                    >
+                      <div className="flex items-start gap-4">
+                        <Avatar>
+                          <AvatarImage src={post.avatar} alt={post.author} />
+                          <AvatarFallback>{post.author[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="font-semibold text-white">{post.author}</h3>
+                            <span className="text-purple-200 text-sm">
+                              {post.timestamp}
+                            </span>
+                          </div>
+                          <p className="text-purple-200 mb-4">{post.content}</p>
+                          {post.relatedNeoId && (
+                            <div className="bg-purple-500/20 px-3 py-1 rounded-full text-sm text-white inline-block mb-4">
+                              🔭 Looking at: {
+                                neoData.find(neo => neo.id === post.relatedNeoId)?.name || 'Unknown NEO'
+                              }
+                            </div>
+                          )}
+                          <div className="flex items-center gap-4">
+                            <Button variant="ghost" className="text-white hover:bg-white/10">
+                              <ThumbsUp className="h-4 w-4 mr-2" />
+                              {post.likes}
+                            </Button>
+                            <Button variant="ghost" className="text-white hover:bg-white/10">
+                              <MessageCircle className="h-4 w-4 mr-2" />
+                              {post.replies}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Date Range Dialog - Updated for child-friendly theme */}
