@@ -6,6 +6,7 @@ import { extend } from '@react-three/fiber'
 import { OrbitControls, TransformControls } from 'three-stdlib'
 extend({ OrbitControls, TransformControls })
 
+
 interface Planet {
   name: string;
   radius: number;
@@ -33,6 +34,7 @@ interface NEO {
     };
     close_approach_date: string;
   }>;
+  is_potentially_hazardous_asteroid: boolean;
 }
 
 interface SolarSystemProps {
@@ -50,7 +52,7 @@ const PLANETS: Planet[] = [
 const SolarSystem: React.FC<SolarSystemProps> = ({ neoData, onNEOClick }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   console.log("SolarSystem rendered:", { neoData, mountRef });
-  const sceneRef = useRef<THREE.Scene>();
+  const sceneRef = useRef<THREE.Scene>(new THREE.Scene());
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -192,11 +194,13 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ neoData, onNEOClick }) => {
 
       // Clean up
       return () => {
+        window.removeEventListener('click', onClick);
         if (mountNode) {
           mountNode.removeChild(renderer.domElement);
         }
+        renderer.dispose();
       };
-    }, 0); // Delay of 100ms
+    }, 0); // Delay of 0ms
 
     return () => clearTimeout(timer);
   }, [neoData, onNEOClick]);

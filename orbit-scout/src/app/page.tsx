@@ -13,6 +13,7 @@ import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
 import Navbar from '@/components/navbar';
+import Image from 'next/image';
 
 interface NEO {
   id: string;
@@ -32,6 +33,7 @@ interface NEO {
     };
     close_approach_date: string;
   }>;
+  is_potentially_hazardous_asteroid: boolean;
 }
 
 interface ForumPost {
@@ -116,6 +118,19 @@ const Home: React.FC = () => {
     setShowIntroDialog(false);
     setIntroDialogClosed(true);
   };
+
+  const svgIcon = (
+    <svg width="20" height="20" viewBox="0 0 2000 2000" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clipPath="url(#clip0_33_2)">
+        <path d="M1928.52 3.51562L1169.53 295.312L1178.52 180.859C1182.42 130.859 1128.52 96.875 1084.77 121.875L395.703 521.094C150.781 662.891 0 924.219 0 1207.03C0 1644.92 355.078 2000 792.969 2000C1075.78 2000 1337.5 1849.22 1479.3 1604.3L1878.12 915.234C1903.52 871.875 1869.53 817.578 1819.14 821.484L1704.69 830.469L1996.48 71.4844C1998.83 65.625 2000 58.9844 2000 52.7344C2000 23.4375 1976.56 0 1947.27 0C1940.62 0 1934.38 1.17187 1928.52 3.51562ZM750 750C882.608 750 1009.79 802.678 1103.55 896.447C1197.32 990.215 1250 1117.39 1250 1250C1250 1382.61 1197.32 1509.79 1103.55 1603.55C1009.79 1697.32 882.608 1750 750 1750C617.392 1750 490.215 1697.32 396.447 1603.55C302.678 1509.79 250 1382.61 250 1250C250 1117.39 302.678 990.215 396.447 896.447C490.215 802.678 617.392 750 750 750ZM750 1125C750 1091.85 736.83 1060.05 713.388 1036.61C689.946 1013.17 658.152 1000 625 1000C591.848 1000 560.054 1013.17 536.612 1036.61C513.17 1060.05 500 1091.85 500 1125C500 1158.15 513.17 1189.95 536.612 1213.39C560.054 1236.83 591.848 1250 625 1250C658.152 1250 689.946 1236.83 713.388 1213.39C736.83 1189.95 750 1158.15 750 1125ZM812.5 1500C829.076 1500 844.973 1493.42 856.694 1481.69C868.415 1469.97 875 1454.08 875 1437.5C875 1420.92 868.415 1405.03 856.694 1393.31C844.973 1381.58 829.076 1375 812.5 1375C795.924 1375 780.027 1381.58 768.306 1393.31C756.585 1405.03 750 1420.92 750 1437.5C750 1454.08 756.585 1469.97 768.306 1481.69C780.027 1493.42 795.924 1500 812.5 1500Z" fill="white"/>
+      </g>
+      <defs>
+        <clipPath id="clip0_33_2">
+          <rect width="2000" height="2000" fill="white"/>
+        </clipPath>
+      </defs>
+    </svg>
+  );
 
   const handlePostSubmit = (content: string, relatedNeoId?: string) => {
     const newPost: ForumPost = {
@@ -217,7 +232,7 @@ const Home: React.FC = () => {
                     onClick={() => setSelectedNEO(neo)}
                   >
                     <h3 className="font-semibold text-white flex items-center gap-2">
-                      <Rocket className="h-4 w-4" />
+                      {svgIcon}
                       {neo.name}
                     </h3>
                     <div className="text-sm text-purple-200 mt-2">
@@ -274,6 +289,14 @@ const Home: React.FC = () => {
                       <p className="text-purple-200">When?</p>
                       <p className="text-2xl font-medium">
                         {format(new Date(selectedNEO.close_approach_data[0].close_approach_date), 'MMM dd, yyyy')}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <div className={`p-4 rounded-xl border ${selectedNEO.is_potentially_hazardous_asteroid ? 'border-red-500 bg-red-500/20' : 'border-green-500 bg-green-500/20'}`}>
+                      <p className="text-purple-200">Danger Level:</p>
+                      <p className={`text-2xl font-medium ${selectedNEO.is_potentially_hazardous_asteroid ? 'text-red-500' : 'text-green-500'}`}>
+                        {selectedNEO.is_potentially_hazardous_asteroid ? 'Hazardous' : 'Not Hazardous'}
                       </p>
                     </div>
                   </div>
