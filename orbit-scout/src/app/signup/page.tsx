@@ -1,44 +1,55 @@
 import React, { useState } from 'react';
 
-const LoginPage: React.FC = () => {
+const SignupPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        // Handle login logic here
-        console.log('Email:', email);
-        console.log('Password:', password);
+        if (password !== confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+        // Handle signup logic here
+        console.log('Signup successful', { email, password });
     };
 
     return (
         <div>
-            <h2>Login</h2>
+            <h2>Signup</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="email">Email:</label>
+                    <label>Email:</label>
                     <input
                         type="email"
-                        id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                 </div>
                 <div>
-                    <label htmlFor="password">Password:</label>
+                    <label>Password:</label>
                     <input
                         type="password"
-                        id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                 </div>
-                <button type="submit">Login</button>
+                <div>
+                    <label>Confirm Password:</label>
+                    <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <button type="submit">Signup</button>
             </form>
         </div>
     );
 };
 
-export default LoginPage;
+export default SignupPage;
