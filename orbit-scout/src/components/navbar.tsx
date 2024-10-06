@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
             <div className="max-w-7xl mx-auto px-5">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <Telescope className="h-12 w-12 animate-bounce" />
+                        <Telescope size={40} className="h-12 w-12 animate-bounce" />
                         <div>
                             <h1 className="text-4xl font-bold mb-2 font-comic">Orbit Scout!</h1>
                             <p className="text-lg opacity-90">
