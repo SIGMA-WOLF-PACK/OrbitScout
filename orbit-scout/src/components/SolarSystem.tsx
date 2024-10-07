@@ -148,7 +148,7 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ neoData, onNEOClick }) => {
 
     // Sun
     const sunGeometry = new THREE.SphereGeometry(2, 32, 32);
-    const sunMaterial = new THREE.MeshBasicMaterial({
+    const sunMaterial = new THREE.MeshStandardMaterial({
       color: 0xffff00,
       emissive: 0xffff00,
       emissiveIntensity: 0.5,
@@ -157,12 +157,33 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ neoData, onNEOClick }) => {
     sun.position.set(0, 0, 0); // Center the sun
     scene.add(sun);
 
+    // Planets
+    const planetMeshes: THREE.Mesh[] = [];
+    PLANETS.forEach((planet) => {
+      const planetGeometry = new THREE.SphereGeometry(planet.radius, 32, 32);
+      const planetMaterial = new THREE.MeshStandardMaterial({
+        color: planet.color,
+      });
+      const planetMesh = new THREE.Mesh(planetGeometry, planetMaterial);
+      planetMesh.position.set(planet.distance, 0, 0);
+      planetMeshes.push(planetMesh);
+      scene.add(planetMesh);
+    });
+
     // Animation
     const animate = () => {
       requestAnimationFrame(animate);
 
       // Rotate sun
       sun.rotation.y += 0.005;
+
+      // Rotate planets
+      planetMeshes.forEach((planetMesh, index) => {
+        const planet = PLANETS[index];
+        planetMesh.rotation.y += planet.rotationSpeed;
+        planetMesh.position.x = planet.distance * Math.cos(Date.now() * 0.001 * planet.orbitalSpeed);
+        planetMesh.position.z = planet.distance * Math.sin(Date.now() * 0.001 * planet.orbitalSpeed);
+      });
 
       // Update controls
       controls.update();
@@ -190,6 +211,7 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ neoData, onNEOClick }) => {
       window.removeEventListener("resize", handleResize);
       renderer.dispose();
       if (mountRef.current && renderer.domElement) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         mountRef.current.removeChild(renderer.domElement);
       }
     };
