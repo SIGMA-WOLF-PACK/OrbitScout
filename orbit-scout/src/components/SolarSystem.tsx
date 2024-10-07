@@ -81,6 +81,38 @@ const PLANETS: Planet[] = [
     rotationSpeed: 0.007,
     orbitalSpeed: 0.008,
   },
+  {
+    name: "Jupiter",
+    radius: 11.21,
+    distance: 52.0,
+    color: "#D2691E",
+    rotationSpeed: 0.005,
+    orbitalSpeed: 0.002,
+  },
+  {
+    name: "Saturn",
+    radius: 9.45,
+    distance: 95.0,
+    color: "#DAA520",
+    rotationSpeed: 0.004,
+    orbitalSpeed: 0.0018,
+  },
+  {
+    name: "Uranus",
+    radius: 4.01,
+    distance: 192.0,
+    color: "#4682B4",
+    rotationSpeed: 0.003,
+    orbitalSpeed: 0.0012,
+  },
+  {
+    name: "Neptune",
+    radius: 3.88,
+    distance: 300.0,
+    color: "#4169E1",
+    rotationSpeed: 0.003,
+    orbitalSpeed: 0.001,
+  },
 ];
 
 interface SolarSystemProps {
@@ -139,7 +171,7 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ neoData, onNEOClick }) => {
     controlsRef.current = controls;
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+    const ambientLight = new THREE.AmbientLight(0x404040, 25);
     scene.add(ambientLight);
 
     const pointLight = new THREE.PointLight(0xffffff, 1);
